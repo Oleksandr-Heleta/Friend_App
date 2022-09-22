@@ -1,8 +1,9 @@
-import './style/style.css';
+import "./style/style.css";
 
-import HeaderView from "./script/views/HeaderView";
-import FormView from "./script/views/FormView";
-import CardsView from "./script/views/CardsView";
+import HeaderView from './script/views/HeaderView';
+import FormView from './script/views/FormView';
+import CardsView from './script/views/CardsView';
+
 
 class AppView {
     constructor() {
