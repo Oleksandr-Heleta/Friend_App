@@ -21,6 +21,10 @@ class CardsView extends BaseView {
     }
 
     render() {
+        if (this.cardsModel.error) {
+
+            return `<h3 class="loading">Error<br>${this.cardsModel.error} </h3>`;
+        }
         if (this.cardsModel.attributes) {
             let str = '<ul class="friends">';
             str += this.cardsModel.attributes
@@ -38,13 +42,13 @@ class CardsView extends BaseView {
             // }
             return str;
         } else {
-            this.cardsModel.createUserList();
+
             return '<h3 class="loading"> Loading...</h3>'
         }
     }
 
     afterRender() {
-
+        window.onload = this.controller.onLoad.bind(this.controller);
 
 
     }

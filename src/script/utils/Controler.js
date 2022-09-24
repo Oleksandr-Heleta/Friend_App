@@ -7,6 +7,16 @@ class Controller {
         this.cardsModel = new CardsModel();
     }
 
+    resetForm(event) {
+        const formElement = event.target.closest('.form');
+        formElement.findName.value = '';
+        formElement.minAge.value = '';
+        formElement.maxAge.value = '';
+        formElement.gender.value = 'both';
+        formElement.sort.value = 'abcAscending';
+        this.setDataFromForm(event);
+    }
+
     setDataFromForm(event) {
         const formElement = event.target.closest('.form');
         const formData = {
@@ -21,7 +31,7 @@ class Controller {
     }
 
     onOpenMobileMenu(event) {
-        const menuBtn = event.target;
+        const menuBtn = document.querySelector('.mob_menu');
         document.body.classList.toggle('lock');
         const aside = document.querySelector('.aside');
         aside.classList.toggle('active');
@@ -30,25 +40,45 @@ class Controller {
 
     onSubmitForm(event) {
         event.preventDefault();
-
         this.setDataFromForm(event);
     }
 
-    onCheck(event) {
+    onClick(event) {
         if (event.target.closest('.form-checkbox')) {
-            const checkBox = event.target.closest('.form-checkbox');
-            this.setDataFromForm(event);
-            checkBox.checked = true;
+            this.onCheck(event);
         }
+        if (event.target.closest('.form-button')) {
+            switch (event.target.closest('.form-button').id) {
+                case 'submit':
+                    if (event.target.closest('.active')) {
+                        this.onOpenMobileMenu();
+                    }
+                    break;
+                case 'reset':
+                    this.resetForm(event);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    onCheck(event) {
+        const checkBox = event.target.closest('.form-checkbox');
+        this.setDataFromForm(event);
+        checkBox.checked = true;
     }
 
     onInput(event) {
         const input = event.target.closest('.form-input');
         if (input) {
-            // console.log(input.value);
             this.setDataFromForm(event);
 
         }
+    }
+
+    onLoad() {
+        this.cardsModel.createUserList();
     }
 
 

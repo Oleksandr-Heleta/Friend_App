@@ -33,7 +33,7 @@ class FormView extends BaseView {
     afterRender() {
         const form = document.querySelector(".form");
         form.addEventListener('submit', this.controller.onSubmitForm.bind(this.controller))
-        form.addEventListener('click', this.controller.onCheck.bind(this.controller))
+        form.addEventListener('click', this.controller.onClick.bind(this.controller))
         form.addEventListener('input', this.controller.onInput.bind(this.controller))
 
     }
@@ -51,11 +51,11 @@ class FormView extends BaseView {
          <h3 class="form-subtitle">filter</h3>
          <div class="form-box">
              <div class="form-group">
-                 <input type="number" name="findAge" id="minAge" class="form-input" placeholder=" ">
+                 <input type="number" name="findAge" id="minAge" class="form-input" placeholder=" " min="0" max="100">
                  <label for="minAge" class="form-label">min age</label>
              </div>
              <div class="form-group">
-                 <input type="number" name="findAge" id="maxAge" class="form-input" placeholder=" ">
+                 <input type="number" name="findAge" id="maxAge" class="form-input" placeholder=" " min="0" max="100">
                  <label for="maxAge" class="form-label">max age</label>
              </div>
          </div>
@@ -110,7 +110,8 @@ class FormView extends BaseView {
                  </label>
              </div>
          </div>
-         <button class="form-button button" type="submit">submit</button>
+         <button class="form-button button" type="submit" id="submit">submit</button>
+          <button class="form-button button" id="reset">reset</button>
      </form > `;
 }
 

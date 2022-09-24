@@ -7,6 +7,7 @@ class CardsModel extends BaseModel {
         this.url = 'https://randomuser.me/api/?seed=foobar&results=100&inc=gender,name,email,dob,phone,picture,location';
         this.attributes = null;
         this.users = null;
+        this.error = null;
         if (!CardsModel.instance) {
             CardsModel.instance = this;
         }
@@ -15,12 +16,18 @@ class CardsModel extends BaseModel {
     }
 
 
-    async createUserList() {
-        const response = await fetch(this.url);
-        const results = await response.json();
-        const users = await results.results;
+    createUserList() {
 
-        return this.setAtribute(users);
+        fetch(this.url)
+            .then((response, reject) => this.clear(response, reject))
+            .then(response => response.json())
+            .then(results => results.results)
+            .then(users => this.setAtribute(users))
+            .catch(err => {
+                this.error = err.message;
+                console.error(err);
+                this.publish('changeData');
+            });
 
     }
 
@@ -37,13 +44,13 @@ class CardsModel extends BaseModel {
                 location: user.location.city,
             };
         });
-
+        this.error = null;
         this.findAndSort({ gender: "both", sort: "abcAscending" })
 
     }
 
     findAndSort({ name, minAge, maxAge, gender, sort }) {
-        // console.log({ name, minAge, maxAge, gender, sort });
+
         if (!this.users) {
             this.createUserList()
 
@@ -65,9 +72,7 @@ class CardsModel extends BaseModel {
     }
 
     filterByName(name) {
-        // console.log(name);
         this.attributes = this.attributes.filter((user) => (user.name.toLowerCase().includes(name.toLowerCase())));
-        // console.log(this.attributes);
     }
 
     filterByAge(minAge = 0, maxAge = 999) {
@@ -76,9 +81,7 @@ class CardsModel extends BaseModel {
             minAge = maxAge;
             maxAge = i;
         }
-        console.log(minAge, maxAge);
         this.attributes = this.attributes.filter((user) => (user.age >= minAge && user.age <= maxAge));
-        console.log(this.attributes);
     }
 
     filterByGender(gender) {
