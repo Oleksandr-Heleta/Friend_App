@@ -9,7 +9,6 @@ class HeaderView extends BaseView {
         this.controller = new Controller();
         this.template = HeaderView.template;
         this.className = 'header';
-
     }
 
 

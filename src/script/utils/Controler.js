@@ -1,5 +1,9 @@
 import FormModel from "../models/FormModel";
 import CardsModel from "../models/CardsModel";
+import {
+    ABC_Ascending,
+    BOTH
+} from "../utils/utils";
 
 class Controller {
     constructor() {
@@ -7,30 +11,34 @@ class Controller {
         this.cardsModel = new CardsModel();
     }
 
-    resetForm(event) {
-        const formElement = event.target.closest('.form');
-        formElement.findName.value = '';
-        formElement.minAge.value = '';
-        formElement.maxAge.value = '';
-        formElement.gender.value = 'both';
-        formElement.sort.value = 'abcAscending';
-        this.setDataFromForm(event);
+    getDOMelem(event, selector) {
+        return event.target.closest(selector);
     }
 
-    setDataFromForm(event) {
-        const formElement = event.target.closest('.form');
-        const formData = {
-            name: formElement.findName.value.trim(),
-            minAge: +formElement.minAge.value || undefined,
-            maxAge: +formElement.maxAge.value || undefined,
-            gender: formElement.gender.value,
-            sort: formElement.sort.value,
+    resetForm(event) {
+        const { findName, minAge, maxAge, gender, sort } = this.getDOMelem(event, '.form');
+        findName.value = '';
+        minAge.value = '';
+        maxAge.value = '';
+        gender.value = BOTH;
+        sort.value = ABC_Ascending;
+        this.setRequirementsFromForm(event);
+    }
+
+    setRequirementsFromForm(event) {
+        const { findName, minAge, maxAge, gender, sort } = this.getDOMelem(event, '.form');
+        const formRequirements = {
+            name: findName.value.trim(),
+            minAge: +minAge.value || undefined,
+            maxAge: +maxAge.value || undefined,
+            gender: gender.value,
+            sort: sort.value
         };
 
-        this.cardsModel.findAndSort(formData);
+        this.cardsModel.findAndSort(formRequirements);
     }
 
-    onOpenMobileMenu(event) {
+    onOpenMobileMenu() {
         const menuBtn = document.querySelector('.mob_menu');
         document.body.classList.toggle('lock');
         const aside = document.querySelector('.aside');
@@ -40,17 +48,17 @@ class Controller {
 
     onSubmitForm(event) {
         event.preventDefault();
-        this.setDataFromForm(event);
+        this.setRequirementsFromForm(event);
     }
 
     onClick(event) {
-        if (event.target.closest('.form-checkbox')) {
+        if (this.getDOMelem(event, '.form-checkbox')) {
             this.onCheck(event);
         }
-        if (event.target.closest('.form-button')) {
-            switch (event.target.closest('.form-button').id) {
+        if (this.getDOMelem(event, '.form-button')) {
+            switch (this.getDOMelem(event, '.form-button').id) {
                 case 'submit':
-                    if (event.target.closest('.active')) {
+                    if (this.getDOMelem(event, '.active')) {
                         this.onOpenMobileMenu();
                     }
                     break;
@@ -64,15 +72,15 @@ class Controller {
     }
 
     onCheck(event) {
-        const checkBox = event.target.closest('.form-checkbox');
-        this.setDataFromForm(event);
+        const checkBox = this.getDOMelem(event, '.form-checkbox');
+        this.setRequirementsFromForm(event);
         checkBox.checked = true;
     }
 
     onInput(event) {
-        const input = event.target.closest('.form-input');
+        const input = this.getDOMelem(event, '.form-input');
         if (input) {
-            this.setDataFromForm(event);
+            this.setRequirementsFromForm(event);
 
         }
     }

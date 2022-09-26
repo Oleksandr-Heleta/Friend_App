@@ -9,10 +9,7 @@ class BaseModel extends PubSub {
         if (!response.ok) {
             throw Error(response.status);
         }
-
-
         return response;
-
     }
 };
 
