@@ -39,3 +39,4 @@ class HeaderView extends BaseView {
 }
 
 export default HeaderView
+

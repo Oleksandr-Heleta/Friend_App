@@ -89,7 +89,12 @@ class Controller {
         this.cardsModel.createUserList();
     }
 
+    onPage({ target: button }) {
+        this.cardsModel.switchPage(button.id);
+    }
+
 
 };
 
 export default Controller
+
